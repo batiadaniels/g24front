@@ -1,0 +1,104 @@
+REDUX
+
+¿QUÉ ES?
+Redux es una librería JS de código abierto para el manejo del estado de las aplicaiones. 
+Es comúnmente usada con otras librerías como React o Angular para la construcción de Interfaces de Usuario.
+
+¿POR QUÉ USAR REDUX?
+Como los requisitos en aplicaciones JavaScript de una sola página se están volviendo cada vez más complicados, nuestro código, mas que nunca, debe manejar el estado. Este estado puede incluir respuestas del servidor y datos cacheados, así como datos creados localmente que todavía no fueron guardados en el servidor. El estado de las UI también se volvió más complejo, al necesitar mantener la ruta activa, el tab seleccionado, si mostrar o no un spinner, si deben mostrarse los controles de paginación o no.
+Controlar ese cambiante estado es dificil. Si un modelo puede actualizar otro modelo, entonces una vista puede actualizar un modelo, el cual actualiza otro modelo, y esto causa que otra vista se actualice. En cierto punto, ya no se entiende que esta pasando en la aplicación ya que perdiste control sobre el cuándo, el por qué y el cómo de su estado.
+Esta complejidad es difícil de manejar acá es donde entra Redux, una arquitectura que soluciona la comunicación y el flujo de información en la app.
+
+PRINCIPIOS FUNDAMENTALES DE REDUX:
+    • El estado de toda tu aplicación esta almacenado en un árbol guardado en un único store.
+    • La única forma de modificar el estado es emitiendo una acción, un objeto describiendo que ocurrió.
+    • Para especificar como el árbol de estado es transformado por las acciones, se utilizan funciones(reducers) puros.
+
+STORE
+Redux ofrece una solución para almacenar todo el estado de su aplicación en un solo lugar, llamado "store". Funciona como puente entre la acción y el reductor(reducer). Luego, los componentes "envían" los cambios de estado al store, no directamente a otros componentes. Con Redux, está claro que todos los componentes obtienen su estado del store.
+
+Store es el objeto que contiene el estado de la aplicación y proporciona algunos métodos auxiliares para acceder al estado, enviar acciones y registrar oyentes(listeners). Todo el estado está representado por un solo store. Cualquier acción devuelve un nuevo estado a través de reductores(reducers). Eso hace que Redux sea muy simple y predecible. Puede acceder al estado almacenado, actualizar el estado y registrar o cancelar el registro de oyentes(listeners) a través de métodos auxiliares.
+
+EJEMPLO: 
+        type STORE = {
+            dispatch: Dispatch
+            getState(): State
+            subscribe: (listener: () => void) => () => void
+            relpaceReducer: (reducer: Reducer) => void
+        }
+
+ACCIONES
+Las acciones son eventos. El objeto store obtiene información solo de las acciones. Envían datos desde la aplicación al store. Los datos pueden provenir de interacciones de usuarios, llamadas API o incluso envíos de formularios. Tienen una propiedad de tipo que describe el tipo de acción y la carga de información(payload) que se envía al store. Llamar acciones en cualquier parte de la aplicación es muy fácil. Utilice el método de envío(dispatch).
+Las acciones deben tener un campo de tipo que indique el tipo de acción que se está realizando.
+Cada vez que se produce un cambio de estado en los componentes, se activa un creador de acciones.
+Un creador de acción es una función llamada acción. Las acciones son objetos simples de información de javascript que envían datos desde su aplicación al store. Son la única fuente de información para el objeto store.
+
+REDUCERS
+Los reductores(reducers) son funciones puras que toman el estado actual de una aplicación, realizan una acción y devuelven un nuevo estado. Estos estados se almacenan como objetos y especifican cómo cambia el estado de una aplicación en respuesta a una acción enviada al store.
+Se basa en el método de reducción de matriz(arrays), donde acepta una devolución de llamada o callback (en este caso el reductor o reducer) y le permite obtener un valor único de múltiples valores, sumas de números enteros o una acumulación de flujos de valores. Comprender cómo funcionan los reductores es importante porque realizan la mayor parte del trabajo.
+Los reductores especifican cómo cambia el estado de la aplicación en respuesta a las acciones enviadas al objeto store. Las acciones solo describen lo que sucedió, pero no describen cómo cambia el estado de la aplicación. Un reductor es una función que acepta el estado actual y una acción y devuelve un nuevo estado con la acción realizada.
+
+Para cualquier aplicación significativa, poner toda su lógica de actualización en una sola función reductora se volverá rápidamente imposible de mantener. Si bien no existe una regla única sobre que tan grande debe ser una función, generalmente se acepta que las funciones deben ser relativamente cortas e idealmente solo hacer una cosa específica.
+Debido a esto, es una buena práctica de programación tomar partes de código que son muy largas o que hacen muchas cosas diferentes y dividirlas en partes más pequeñas que sean más fáciles de entender.
+Dado que un reductor de Redux es solo una función, se aplica el mismo concepto. Puede dividir parte de su lógica reductora en otra función y llamar a esa nueva función desde la función principal.
+Estas nuevas funciones normalmente caerían en una de tres categorías:
+    • Pequeñas funciones de utilidad que contienen algún fragmento de lógica reutilizable que se necesita en varios lugares (que pueden o no estar realmente relacionados con la lógica comercial especifica).
+    • Funciones para manejar un caso de actualización específico, que a menudo necesita parámetros distintos al típico par (estado, acción).
+    • Funciones que manejan todas las actualizaciones para una determinada porción (slice) de estado.
+Estas funciones generalmente tienen la firma de parámetro típica (estado, acción).
+
+Para mayor claridad, estos términos se utilizarán para distinguir entre diferentes tipos de funciones y
+diferentes casos de uso:
+    - reducer: cualquier función con la firma (estado, acción) -> newState (es decir, cualquier función que podría usarse como argumento para Array.prototype.reduce).
+    - root reducer: la función de reducción que en realidad se pasa como primer argumento a createStore.
+    Esta es la única parte de la lógica reductora que debe tener la firma (estado, acción) -> estado nuevo.
+    - slice reducer: un reductor que se usa para manejar las actualizaciones de un segmento específico
+    (slice) del árbol de estado, generalmente pasándolo a combine Reducers.
+
+FUNCION DISPATCH:
+La función despachadora (o simplemente función dispatch) es una función que acepta una acción o una acción asincrona; entonces puede o no despachar una o mas acciones al store.
+Debemos distinguir entre una función despachadora en general y la función base dispatch provista por la instancia del store sin ningún middleware.
+La función base dispatch siempre envía sincronamente acciones al reducer del store, junto al estado anterior devuelto por el store, para calcular el nuevo estado. Espera que las acciones sean objetos planos listos para ser consumidos por el reducer.
+Los middlewares envuelven la función dispatch base. Le permiten a la función dispatch manejar acciones asíncronas además de las acciones. Un middleware puede transformar, retrasar, ignorar o interpretar de cualquier forma una acción o acción asíncrona antes de pasarla al siguiente middleware.
+
+EJEMPLO:
+    type BaseDispatch = (a: Action) => Action
+    type Dispatch = (a: Action | AsyncAction) => any
+
+
+MIDDLEWARE
+Es una funcion de orden superior que toma una funcion despachadora y devuelve una nueva funcion despachadora. A menudo convierten acciones asincronas en acciones. 
+Los middleware son combinables usando funciones. Son utiles para registrar acciones, realizar efectos secundarios como ruteo, o convertir una llamada asincrona a una API en una serie de acciones sincronas.
+
+EJEMPLO:
+    type MiddlewareAPI = {dispatch: Dispatch, getState: () => State }
+    type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
+
+AACION ASINCRONA
+Una acción asincrona es un valor que es enviado a una función despachadora, pero todavía no esta listo para ser consumido por el reducer.
+Debe ser transformada por un middleware en una acción (o una serie de acciones) antes de ser enviada a la función dispatch() base.
+Las acciones asíncronas pueden ser de diferentes tipos, dependiendo del middleware que uses.
+Normalmente son primitivos asíncronos como una promesa o un thunk, que no son enviados inmediatamente a un reducer, pero despachan una acción cuando una operación se completa.
+
+EJEMPLO:
+    type AsyncAction = any
+
+REDUX THUNK
+De forma predeterminada, las acciones de Redux se envían de forma sincrona, lo que es un problema para cualquier aplicación no trivial que necesite comunicarse con una API externa o realizar efectos secundarios. Redux también permite el middleware que se encuentra entre una acción que se envía y la acción que llega a los reductores.
+
+Thunk es un concepto de programación en el que se utiliza una función para retrasar la evaluación/cálculo de una operación.
+
+Redux Thunk es un middleware que le permite llamar a creadores de acciones que devuelven una función en lugar de un objeto de acción. Esa función recibe el método de envío al store, que luego se usa para enviar acciones síncronas regulares dentro del cuerpo de la función una vez que se han completado las operaciones asíncronas.
+
+CreatAsyncThunk - Creamos nuestra propia thunk con Redux Thunk
+Necesita tres parametros:
+    -type
+    -playloadCreator
+    -options
+
+COMO INSTALAR REDUX
+# NPM
+npm install @reduxjs/toolkit 
+
+# YARN
+yarn add @reduxjs/toolkit

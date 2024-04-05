@@ -1,17 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/users'
+const API_URL = 'http://localhost:5000/api/users/';
 
-//Registrar un usuario
-
-const register = async (userData) => {
-    const response =  await axios.post(API_URL, userData)
+//Login a user
+const login = async (userData) => {
+    const response =  await axios.post(API_URL + 'login', userData);
     
-    return response.data
+    if(response.data){
+        localStorage.setItem('user', JSON.stringify(response.data));
+    }
+
+    return response.data;
+}
+
+//Register a user
+const register = async (userData) => {
+    const response =  await axios.post(API_URL, userData);
+    
+    return response.data;
+}
+
+//Logout a user
+const logout = async() => {
+    localStorage.removeItem('user')
 }
 
 const authService = {
-    register
+    register,
+    login,
+    logout
 }
 
-export default authService
+export default authService;

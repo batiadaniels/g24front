@@ -30,9 +30,8 @@ const Register = () => {
         } 
         if (isSuccess){
             navigate('/login')
-            dispatch(reset())
         }
-
+        dispatch(reset())
        
 
     },[user, isError, isSuccess, message, navigate, dispatch])

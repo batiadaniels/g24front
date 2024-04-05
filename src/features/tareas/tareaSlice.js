@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import tareaService from "./tareaService";
 
 const initialState = {
-    tareas: [],
+    mistareas: [],
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -29,19 +29,19 @@ export const tareaSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(crearTarea.pending, (state) => {
-            state.isLoading = true
-        })
-        .addCase(crearTarea.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.isSuccess = true
-            state.tareas.push(action.payload)
-        })
-        .addCase(crearTarea.rejected, (state, action) =>{
-            state.isLoading = false
-            state.isError = true
-            state.message = action.payload
-        })
+            .addCase(crearTarea.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(crearTarea.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.mistareas.push(action.payload)
+            })
+            .addCase(crearTarea.rejected, (state, action) =>{
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 })
 
